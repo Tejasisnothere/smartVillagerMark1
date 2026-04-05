@@ -24,7 +24,7 @@ collection_name = "villager"
 
 class Chain:
     def __init__(self):
-        self.store = Storage(client=client, database=db_name, collection_name=collection_name, limit=5)
+        self.store = Storage(client=client, db_name=db_name, collection_name=collection_name, limit=5)
         self.replier = Replier()
         self.summObj = Summarizer()
 
@@ -48,7 +48,7 @@ class Chain:
         if userMessage:
             self.store.save_message(vid,uid,userMessage)
 
-        chat = self.store.getrecent(vid,uid)
+        chat = self.store.get_recent(vid,uid)
         reply = None
 
         if(len(chat)==0):
@@ -56,7 +56,7 @@ class Chain:
 
         else:
             summary = self.store.get_summary(vid,uid)
-            reply = self.extendConvo(chat,summary)
+            reply = "villager: " + self.extendConvo(chat,summary)
             
 
         threading.Thread(
@@ -70,7 +70,7 @@ class Chain:
     def background_worker(self, vid, uid, reply):
         try:
             self.store.save_message(vid,uid,reply)
-            chat = self.store.getrecent(vid,uid)
+            chat = self.store.get_recent(vid,uid)
             self.summary = self.summObj.summarizeChat(chat)
             self.store.save_summary(vid,uid,self.summary)
         except Exception as e:

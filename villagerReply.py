@@ -20,7 +20,7 @@ class Replier:
 
         self.initiatePrompt = PromptTemplate(
             template = self.loadTemplate("initiate"),
-            input_variables=["summary","chat"]
+            
         )
 
         self.replyPrompt = PromptTemplate(
@@ -43,17 +43,16 @@ class Replier:
         
 
 
-    def chatBuilder(self, chat, user_reply):
+    def chatBuilder(self, chat):
         latest_chat = ""
         for i in chat:
             latest_chat+=i+"\n"
         
-        latest_chat+=user_reply + "\n"
 
         return latest_chat
     
     def initiate(self):
-        result = self.initiateChain.invoke()
+        result = self.initiateChain.invoke({})
         return result
     
     def reply(self,chat, summary):

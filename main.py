@@ -22,14 +22,16 @@ async def right_click_event(request: Request):
     user_id = data.get("userID")
 
     
-    reply = aiReplier.getReply(vid=villager_id, uid=user_id)
+    reply = aiReplier.getReply(vid=villager_id, uid=user_id, userMessage="")
     
-    threading.Thread(
-        function=backgroundSave,
-        args=villager_id
-    ).start()
+    # threading.Thread(
+    #     target=backgroundSave,
+    #     args=villager_id
+    # ).start()
+    backgroundSave(villager_id)
     
-    
+
+    print(reply)
 
     return {"message": reply}
 
@@ -38,15 +40,16 @@ async def right_click_event(request: Request):
 async def message(request: Request):
     data = await request.json()
     user_id = data.get('userID')
+    user_message = data.get('userMessage')
     print("message:", data)
 
     villager_id = None
     with open("latestID.txt", 'r') as f:
         villager_id=f.read()
 
-    reply = aiReplier.getReply(vid=villager_id, uid=user_id)
+    reply = aiReplier.getReply(vid=villager_id, uid=user_id, userMessage="user"+user_message)
     
-
+    print(reply)
     return {"message": reply}
 
 
