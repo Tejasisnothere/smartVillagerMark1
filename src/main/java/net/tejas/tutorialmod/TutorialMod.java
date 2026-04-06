@@ -26,6 +26,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.tejas.tutorialmod.item.ModCreativeModTabs;
+import net.tejas.tutorialmod.item.Moditems;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -60,7 +62,8 @@ public class TutorialMod
     public TutorialMod(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
-
+        ModCreativeModTabs.register(modEventBus);
+        Moditems.register(modEventBus);
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
@@ -88,8 +91,10 @@ public class TutorialMod
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
-        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS)
-            event.accept(EXAMPLE_BLOCK_ITEM);
+        if(event.getTabKey()==CreativeModeTabs.INGREDIENTS){
+            event.accept(Moditems.SAPPHIRE);
+            event.accept(Moditems.RAW_SAPPHIRE);
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
